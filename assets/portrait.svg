@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Khung chân dung Nguyễn Viết Hiếu</title>
+  <desc id="desc">Ảnh chân dung đang được chuẩn bị cho phiên bản công khai.</desc>
+  <rect width="900" height="1200" fill="#e8e0d2"/>
+  <path d="M0 1080 900 900v300H0Z" fill="#a13d2d" opacity=".12"/>
+  <circle cx="450" cy="410" r="145" fill="none" stroke="#1b1917" stroke-width="3"/>
+  <path d="M206 932c30-205 130-308 244-308s214 103 244 308" fill="none" stroke="#1b1917" stroke-width="3"/>
+  <path d="M110 1050h680" stroke="#a13d2d" stroke-width="8"/>
+  <text x="110" y="1120" fill="#1b1917" font-family="serif" font-size="42">NGUYỄN VIẾT HIẾU · 2026</text>
+</svg>
