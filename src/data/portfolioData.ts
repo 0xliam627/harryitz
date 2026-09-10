@@ -158,6 +158,24 @@ export const PROJECTS: ProjectItem[] = [
 
 export const ARTICLES: ArticleItem[] = [
   {
+    id: "vibe-coding-va-gia-tri-thuc",
+    title: "Làn sóng 'vibe coding' và giá trị thực của người làm công nghệ",
+    date: "10 tháng 9, 2026",
+    readTime: "4 phút đọc",
+    tag: "Góc nhìn",
+    dek: "Khi ai cũng có thể tạo ra sản phẩm bằng prompt, giá trị chiều sâu của những năm tháng rèn luyện nền tảng nằm ở đâu?",
+    quote: "Những người chỉ biết dựa vào prompt sẽ khó lòng đảm đương được các bài toán phức tạp—từ thiết kế kiến trúc hệ thống, tối ưu hiệu năng cho đến kỹ thuật dịch ngược. Đó là ranh giới mà câu lệnh đơn thuần khó lòng vượt qua.",
+    featured: true,
+    content: [
+      "Có một thực tế mà đến nay mình nhận thấy rất rõ: AI đang phát triển vượt bậc và hỗ trợ con người đắc lực trong nhiều lĩnh vực, đặc biệt là lập trình. Thời gian gần đây, thuật ngữ \"vibe coding\" xuất hiện ngày càng nhiều—hiểu đơn giản là việc người dùng tạo ra sản phẩm chỉ bằng cách đưa ra câu lệnh (prompt) để AI tự sinh mã nguồn. Nhờ sự lớn mạnh của các mô hình AI như Claude, DeepSeek, Kimi..., làn sóng \"vibe coder\" đang bùng nổ. Tuy nhiên, điều này cũng kéo theo hệ lụy: giá trị thực của sản phẩm công nghệ bị kéo tụt, và thị trường tràn ngập những sản phẩm chắp vá, kém chất lượng.",
+      "Trước đây, những sản phẩm được xây dựng từ tư duy và kiến thức chuyên môn của lập trình viên có giá trị rất cao. Khách hàng sẵn sàng chi một khoản ngân sách tương xứng để thuê người xây dựng website hay tích hợp API. Còn hiện tại, trên thị trường freelance và MMO, sự cạnh tranh về giá đang diễn ra vô cùng khốc liệt. Nhiều người tự nhận dự án nhờ vibe coding dù không cần đầu tư thời gian, tiền bạc hay công sức học lập trình bài bản; vốn liếng của họ chỉ gói gọn trong kinh nghiệm giao tiếp với AI.",
+      "Nhắc đến \"vibe coding\" nhiều lần như vậy, điều mình thực sự muốn gửi gắm ở đây là gì?",
+      "Thành thật mà nói, mình cảm thấy có chút chạnh lòng cho những ai đã dành nhiều năm tháng đèn sách, bỏ công sức, thời gian và tiền bạc để trau dồi nền tảng khoa học máy tính vững chắc. Dù vậy, không có nghĩa là giá trị của họ biến mất. Vấn đề cốt lõi nằm ở chỗ: liệu khách hàng có đủ tỉnh táo để nhận ra giá trị chiều sâu và sẵn sàng chi trả mức thù lao xứng đáng, thay vì chọn giải pháp \"mì ăn liền\" từ những người chỉ biết phụ thuộc vào AI?",
+      "Dẫu vậy, vibe coding cũng có giới hạn rõ rệt. Những người chỉ biết dựa vào prompt sẽ khó lòng đảm đương được các bài toán phức tạp đòi hỏi kinh nghiệm thực chiến dày dặn—từ thiết kế kiến trúc hệ thống, tối ưu hiệu năng cho đến kỹ thuật dịch ngược (reverse engineering). Đó là ranh giới mà câu lệnh đơn thuần khó lòng vượt qua.",
+      "Bài viết này được mình ghi lại vào ngày 10/9, khi vừa bước chân vào giảng đường với tư cách sinh viên năm nhất. Đây là những góc nhìn đúc kết từ những gì mình quan sát được trong giới MMO và Freelancer, chắc chắn khó tránh khỏi những điểm thiếu sót. Mình không có ý công kích bất kỳ cá nhân nào; đây chỉ là đôi dòng trải lòng chân thật trước bước ngoặt quá lớn mà AI mang lại cho ngành công nghệ."
+    ]
+  },
+  {
     id: "pmmp-ngung-phat-trien",
     title: "PMMP ngừng phát triển, còn tôi đã bắt đầu từ đó",
     date: "11 tháng 7, 2026",
@@ -178,3 +196,4 @@ export const ARTICLES: ArticleItem[] = [
     ]
   }
 ];
+

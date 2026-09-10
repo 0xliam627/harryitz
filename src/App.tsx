@@ -14,7 +14,7 @@ export const App: React.FC = () => {
     const handleHash = () => {
       const hash = window.location.hash.replace('#', '');
       if (hash === 'projects') setActiveTab('projects');
-      else if (hash === 'writing') setActiveTab('writing');
+      else if (hash === 'writing' || hash.startsWith('writing-')) setActiveTab('writing');
       else if (hash === 'about') setActiveTab('about');
     };
 

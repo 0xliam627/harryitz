@@ -42,6 +42,7 @@ CHECK_TERMS = [
     "harryitz@duck.com",
     "0335085080",
     "PMMP",
+    "vibe coding",
 ]
 
 def main():

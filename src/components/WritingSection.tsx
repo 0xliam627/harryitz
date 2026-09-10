@@ -15,6 +15,27 @@ export const WritingSection: React.FC = () => {
   const [copiedLink, setCopiedLink] = useState(false);
   const [readingProgress, setReadingProgress] = useState(0);
 
+  // Sync article selection with URL hash for deep-linking
+  useEffect(() => {
+    const handleHashCheck = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash.startsWith('writing-')) {
+        const id = hash.replace('writing-', '');
+        const found = ARTICLES.find((a) => a.id === id);
+        if (found) {
+          setSelectedArticle(found);
+          return;
+        }
+      } else if (hash === 'writing') {
+        setSelectedArticle(null);
+      }
+    };
+
+    handleHashCheck();
+    window.addEventListener('hashchange', handleHashCheck);
+    return () => window.removeEventListener('hashchange', handleHashCheck);
+  }, []);
+
   // Scroll progress for reading mode
   useEffect(() => {
     if (!selectedArticle) return;
@@ -30,9 +51,22 @@ export const WritingSection: React.FC = () => {
     return () => window.removeEventListener('scroll', updateProgress);
   }, [selectedArticle]);
 
+  const handleSelectArticle = (article: ArticleItem) => {
+    setSelectedArticle(article);
+    window.location.hash = `writing-${article.id}`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleBackToList = () => {
+    setSelectedArticle(null);
+    window.location.hash = 'writing';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleShare = (e: React.MouseEvent, article: ArticleItem) => {
     e.stopPropagation();
-    navigator.clipboard.writeText(window.location.href);
+    const shareUrl = `${window.location.origin}${window.location.pathname}#writing-${article.id}`;
+    navigator.clipboard.writeText(shareUrl);
     setCopiedLink(true);
     setTimeout(() => {
       setCopiedLink(false);
@@ -52,10 +86,7 @@ export const WritingSection: React.FC = () => {
         {/* Navigation & Actions */}
         <div className="flex items-center justify-between py-4 border-b border-white/10 mb-8">
           <button
-            onClick={() => {
-              setSelectedArticle(null);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
+            onClick={handleBackToList}
             className="text-xs text-zinc-400 hover:text-white inline-flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
@@ -134,10 +165,7 @@ export const WritingSection: React.FC = () => {
         {/* Footer */}
         <div className="mt-14 pt-6 border-t border-white/10 flex items-center justify-between text-xs text-zinc-500 font-mono">
           <button
-            onClick={() => {
-              setSelectedArticle(null);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
+            onClick={handleBackToList}
             className="hover:text-white inline-flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
@@ -167,10 +195,7 @@ export const WritingSection: React.FC = () => {
         {ARTICLES.map((article) => (
           <article
             key={article.id}
-            onClick={() => {
-              setSelectedArticle(article);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
+            onClick={() => handleSelectArticle(article)}
             className="py-6 first:pt-0 last:pb-0 cursor-pointer group space-y-2 transition-colors"
           >
             <div className="flex items-center gap-3 text-xs text-zinc-500">
