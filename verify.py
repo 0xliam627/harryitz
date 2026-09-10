@@ -1,129 +1,71 @@
 #!/usr/bin/env python3
-from html.parser import HTMLParser
+import sys
 from pathlib import Path
-from urllib.parse import unquote, urlparse
 
 ROOT = Path(__file__).resolve().parent
-PAGES = (ROOT / "index.html", ROOT / "writing" / "pmmp.html")
-REQUIRED = (
-    ROOT / "site.css",
-    ROOT / "tokens.css",
-    ROOT / "assets" / "nguyen-viet-hieu.jpg",
-    ROOT / "assets" / "favicon.svg",
-)
 
+REQUIRED_FILES = [
+    ROOT / "package.json",
+    ROOT / "vite.config.ts",
+    ROOT / "tsconfig.json",
+    ROOT / "index.html",
+    ROOT / "src" / "App.tsx",
+    ROOT / "src" / "main.tsx",
+    ROOT / "src" / "index.css",
+    ROOT / "src" / "types.ts",
+    ROOT / "src" / "data" / "portfolioData.ts",
+    ROOT / "src" / "components" / "ThreeCanvas.tsx",
+    ROOT / "src" / "components" / "Navbar.tsx",
+    ROOT / "src" / "components" / "AboutSection.tsx",
+    ROOT / "src" / "components" / "ProjectsSection.tsx",
+    ROOT / "src" / "components" / "WritingSection.tsx",
+    ROOT / "src" / "components" / "Footer.tsx",
+    ROOT / "public" / "CNAME",
+    ROOT / "public" / "assets" / "favicon.svg",
+    ROOT / "public" / "assets" / "nguyen-viet-hieu.jpg",
+]
 
-class PageParser(HTMLParser):
-    def __init__(self):
-        super().__init__()
-        self.ids = []
-        self.links = []
-        self.images = []
-        self.h1_count = 0
-        self.lang = None
-        self.title = False
-        self.description = False
-
-    def handle_starttag(self, tag, attrs):
-        attrs = dict(attrs)
-        if tag == "html":
-            self.lang = attrs.get("lang")
-        if "id" in attrs:
-            self.ids.append(attrs["id"])
-        if tag == "a" and attrs.get("href"):
-            self.links.append(attrs["href"])
-        if tag == "img":
-            self.images.append(attrs)
-        if tag == "h1":
-            self.h1_count += 1
-        if tag == "title":
-            self.title = True
-        if tag == "meta" and attrs.get("name") == "description" and attrs.get("content"):
-            self.description = True
-
-
-def check_page(path):
-    errors = []
-    parser = PageParser()
-    text = path.read_text(encoding="utf-8")
-    parser.feed(text)
-
-    if parser.lang != "vi":
-        errors.append(f"{path.relative_to(ROOT)}: lang phải là vi")
-    if parser.h1_count != 1:
-        errors.append(f"{path.relative_to(ROOT)}: cần đúng một h1, hiện có {parser.h1_count}")
-    if not parser.title or not parser.description:
-        errors.append(f"{path.relative_to(ROOT)}: thiếu title hoặc meta description")
-    if len(parser.ids) != len(set(parser.ids)):
-        errors.append(f"{path.relative_to(ROOT)}: trùng id")
-
-    for image in parser.images:
-        for key in ("src", "alt", "width", "height"):
-            if not image.get(key):
-                errors.append(f"{path.relative_to(ROOT)}: ảnh thiếu {key}")
-
-    for href in parser.links:
-        parsed = urlparse(href)
-        if parsed.scheme in ("http", "https", "mailto"):
-            continue
-        if not parsed.path:
-            target_path = path
-        elif parsed.path.startswith("/"):
-            target_path = ROOT / unquote(parsed.path.lstrip("/"))
-        else:
-            target_path = path.parent / unquote(parsed.path)
-        if target_path.is_dir():
-            target_path /= "index.html"
-        target_path = target_path.resolve()
-        if not target_path.exists():
-            errors.append(f"{path.relative_to(ROOT)}: link hỏng {href}")
-            continue
-        if parsed.fragment and target_path.suffix == ".html":
-            target_parser = PageParser()
-            target_parser.feed(target_path.read_text(encoding="utf-8"))
-            if parsed.fragment not in target_parser.ids:
-                errors.append(f"{path.relative_to(ROOT)}: fragment hỏng {href}")
-
-    return errors, text
-
+CHECK_TERMS = [
+    "Nguyễn Viết Hiếu",
+    "harryitz",
+    "TwoTech",
+    "2tech.studio",
+    "HUIT",
+    "THPT Cockpit",
+    "Clean APIs",
+    "Practical UI",
+    "Fast Debugging",
+    "Reading",
+    "Gaming",
+    "Sleeping",
+    "Cats 🐱",
+    "harryitz@duck.com",
+    "0335085080",
+    "PMMP",
+]
 
 def main():
     errors = []
-    for required in REQUIRED + PAGES:
-        if not required.exists():
-            errors.append(f"Thiếu file: {required.relative_to(ROOT)}")
+    print("🔍 Kiểm tra các tệp bắt buộc...")
+    for f in REQUIRED_FILES:
+        if not f.exists():
+            errors.append(f"Thiếu tệp: {f.relative_to(ROOT)}")
 
-    texts = {}
-    if not errors:
-        for page in PAGES:
-            page_errors, text = check_page(page)
-            errors.extend(page_errors)
-            texts[page.name] = text
-
-        home = texts["index.html"]
-        article = texts["pmmp.html"]
-        for value in (
-            "Nguyễn Viết Hiếu",
-            "THPT Cockpit",
-            "nguyenhieu.c47s@gmail.com",
-            "github.com/0xliam627",
-            "PHP",
-            "PostgreSQL",
-        ):
-            if value not in home:
-                errors.append(f"index.html: thiếu nội dung {value}")
-        for value in ("datetime=\"2026-07-11\"", "Galaxy J2 Prime", "Uầy, nghĩ lại"):
-            if value not in article:
-                errors.append(f"writing/pmmp.html: thiếu nội dung {value}")
+    print("🔍 Kiểm tra nội dung portfolioData.ts...")
+    data_file = ROOT / "src" / "data" / "portfolioData.ts"
+    if data_file.exists():
+        content = data_file.read_text(encoding="utf-8")
+        for term in CHECK_TERMS:
+            if term not in content:
+                errors.append(f"portfolioData.ts: thiếu thông tin quan trọng '{term}'")
 
     if errors:
-        print("VERIFY FAILED")
-        for error in errors:
-            print(f"- {error}")
-        raise SystemExit(1)
+        print("\n❌ VERIFY FAILED:")
+        for err in errors:
+            print(f"  - {err}")
+        sys.exit(1)
 
-    print("VERIFY OK: 2 pages, links, fragments, metadata, content and image checked")
-
+    print("\n✅ VERIFY OK: Tất cả các file và dữ liệu đều sẵn sàng và đầy đủ!")
 
 if __name__ == "__main__":
     main()
